@@ -19,19 +19,23 @@ const DrawingArea: React.FC<props> = ({ className }) => {
   }, []);
 
   const ZoomInCanvas = () => {
-    let _zoom = zoom + 0.1;
-    setZoom(_zoom);
-    setStyle({
-      transform: `scale(${zoom})`,
-    });
+    if (zoom < 2.75) {
+      let _zoom = zoom + 0.1;
+      setZoom(_zoom);
+      setStyle({
+        transform: `scale(${zoom})`,
+      });
+    }
   };
 
   const ZoomOutCanvas = () => {
-    let _zoom = zoom - 0.1;
-    setZoom(_zoom);
-    setStyle({
-      transform: `scale(${zoom})`,
-    });
+    if (zoom > 0.95) {
+      let _zoom = zoom - 0.1;
+      setZoom(_zoom);
+      setStyle({
+        transform: `scale(${zoom})`,
+      });
+    }
   };
 
   return (
@@ -44,11 +48,13 @@ const DrawingArea: React.FC<props> = ({ className }) => {
           ZoomOutCanvas();
         }
       }}
-      className={className + " flex items-center justify-center"}
+      className={
+        className + " flex items-center justify-center overflow-hidden"
+      }
     >
       <canvas
         style={style}
-        className={`bg-white`}
+        className={`bg-white drop-shadow-xl`}
         width={300}
         height={300}
         ref={canvas}
