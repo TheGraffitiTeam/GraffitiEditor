@@ -7,6 +7,6 @@ type ToolStore = {
 }
 
 
-export const useToolStore = create<ToolStore>((set) => ({
+export const useToolStore = create<ToolStore>(() => ({
     tool: "line"
 }));
