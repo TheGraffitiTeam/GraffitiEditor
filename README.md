@@ -8,16 +8,30 @@ Use yarn or npm for install packages and calling cli tools.
 
 ### Install dependencies
 
-`yarn install`
+```
+# using npm
+npm install
+```
 
-### Build the application
+```
+# using yarn
+yarn install
+```
 
-`yarn build`
+### Build
 
-### Start the application
+###
 
-`yarn start`
+```
+# using npm
+npm run tauri build
+```
+
+```
+# using yarn
+yarn tauri build
+```
 
 ## Recommended IDE Setup
 
-- [VS Code](https://code.visualstudio.com/) + [Tauri](https://marketplace.visualstudio.com/items?itemName=tauri-apps.tauri-vscode) + [rust-analyzer](https://marketplace.visualstudio.com/items?itemName=rust-lang.rust-analyzer)
+[VS Code](https://code.visualstudio.com/) + [Tauri](https://marketplace.visualstudio.com/items?itemName=tauri-apps.tauri-vscode) + [rust-analyzer](https://marketplace.visualstudio.com/items?itemName=rust-lang.rust-analyzer)
