@@ -1,14 +1,26 @@
 import React, { MouseEventHandler } from "react";
-import { useToolStore } from "../../store.ts";
+import { useDrawingStore, useToolStore } from "../../store.ts";
 
 const LineTool: React.FC<{
   name: string;
   onClick: MouseEventHandler<HTMLButtonElement>;
 }> = ({ name, onClick }) => {
   const tool = useToolStore((state) => state.tool);
+  const lines = useDrawingStore((state) => state.lines);
+
   return (
     <button
-      onClick={onClick}
+      onClick={(e) => {
+        onClick(e);
+        useDrawingStore.setState({
+          lines: [
+            [
+              [0, 0, 0],
+              [(3.8 / 350) * 300, 0, 0],
+            ],
+          ],
+        });
+      }}
       title="Line Tool"
       className={`rounded-lg p-2 ${tool == name && "bg-slate-300"}`}
     >
