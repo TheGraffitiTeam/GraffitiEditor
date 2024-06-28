@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from "react";
 import { useDrawingStore, useMouseCoords, useToolStore } from "../store.ts";
-import { drawLine } from "../lib/utils.ts";
+import { doIntersect, drawLine } from "../lib/utils.ts";
 import Vector3 from "../lib/Vector.ts";
 
 interface props {
@@ -14,41 +14,41 @@ const DrawingArea: React.FC<props> = ({ className }) => {
   const tool = useToolStore((state) => state.tool);
   const lines = useDrawingStore((state) => state.lines);
 
-  useEffect(() => {
-    const onKeyDown = (e: KeyboardEvent) => {
-      if (e.key == "z" && e.ctrlKey) {
-        if (lines.length > 0) {
-          if (canvas.current) {
-            const ctx = canvas.current.getContext("2d");
+  // useEffect(() => {
+  //   const onKeyDown = (e: KeyboardEvent) => {
+  //     if (e.key == "z" && e.ctrlKey) {
+  //       if (lines.length > 0) {
+  //         if (canvas.current) {
+  //           const ctx = canvas.current.getContext("2d");
 
-            useDrawingStore.setState((state) => {
-              state.lines.pop();
-              return state;
-            });
+  //           useDrawingStore.setState((state) => {
+  //             state.lines.pop();
+  //             return state;
+  //           });
 
-            if (ctx) {
-              ctx.clearRect(0, 0, canvas.current.width, canvas.current.height);
+  //           if (ctx) {
+  //             ctx.clearRect(0, 0, canvas.current.width, canvas.current.height);
 
-              lines.forEach((line) => {
-                drawLine(
-                  ctx as CanvasRenderingContext2D,
-                  line[0].x,
-                  line[0].y,
-                  line[1].x,
-                  line[1].y
-                );
-              });
-            }
-          }
-        }
-      }
-    };
+  //             lines.forEach((line) => {
+  //               drawLine(
+  //                 ctx as CanvasRenderingContext2D,
+  //                 line[0].x,
+  //                 line[0].y,
+  //                 line[1].x,
+  //                 line[1].y
+  //               );
+  //             });
+  //           }
+  //         }
+  //       }
+  //     }
+  //   };
 
-    window.addEventListener("keydown", onKeyDown);
-    return () => {
-      window.removeEventListener("keydown", onKeyDown);
-    };
-  }, []);
+  //   window.addEventListener("keydown", onKeyDown);
+  //   return () => {
+  //     window.removeEventListener("keydown", onKeyDown);
+  //   };
+  // }, []);
 
   useEffect(() => {
     if (canvas.current) {
@@ -105,7 +105,8 @@ const DrawingArea: React.FC<props> = ({ className }) => {
         className +
         " flex items-center justify-center overflow-hidden " +
         `${tool == "line" ? " cursor-crosshair" : ""}` +
-        `${tool == "rect" ? " cursor-crosshair" : ""}`
+        `${tool == "rect" ? " cursor-crosshair" : ""}` +
+        `${tool == "eraser" ? " cursor-eraser" : ""}`
       }
     >
       <div ref={canvasParent} className="drop-shadow-xl w-full h-full relative">
@@ -164,15 +165,38 @@ const DrawingArea: React.FC<props> = ({ className }) => {
                       ],
                     ],
                   });
-                }
+                } else if (tool == "eraser") {
+                  const newLines = lines.filter((line) => {
+                    return !doIntersect(
+                      [
+                        new Vector3(
+                          useMouseCoords.getState().start[0],
+                          useMouseCoords.getState().start[1],
+                          0
+                        ),
+                        new Vector3(
+                          useMouseCoords.getState().end[0],
+                          useMouseCoords.getState().end[1],
+                          0
+                        ),
+                      ],
+                      [
+                        new Vector3(line[0].x, line[0].y, 0),
+                        new Vector3(line[1].x, line[1].y, 0),
+                      ]
+                    );
+                    //   !(
+                    //   line[0].x == useMouseCoords.getState().start[0] &&
+                    //   line[0].y == useMouseCoords.getState().start[1] &&
+                    //   line[1].x == useMouseCoords.getState().end[0] &&
+                    //   line[1].y == useMouseCoords.getState().end[1]
+                    // );
+                  });
 
-                console.log(
-                  `(${useMouseCoords.getState().start[0]}, ${
-                    useMouseCoords.getState().start[1]
-                  }) - (${useMouseCoords.getState().end[0]}, ${
-                    useMouseCoords.getState().end[1]
-                  })`
-                );
+                  useDrawingStore.setState({
+                    lines: newLines,
+                  });
+                }
 
                 console.log(lines);
               }
