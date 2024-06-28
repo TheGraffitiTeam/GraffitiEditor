@@ -6,3 +6,8 @@
 * {
   transition: all 0.3s;
 }
+
+body {
+  font-family: 'Roboto', sans-serif;
+  background-color: #f9f9f9;
+}

@@ -1,25 +1,37 @@
-import { LineProps } from "@react-three/drei";
-import { ForwardRefComponent } from "@react-three/drei/helpers/ts-utils";
-import { Line2, LineSegments2 } from "three/examples/jsm/Addons.js";
-import { create } from "zustand"
+import { create } from "zustand";
 
-
-
-type ToolStore = {
-    tool: "rect" | "line" | string;
-}
-
+export type ToolStore = {
+  tool: "rect" | "line" | "eraser" | string;
+};
 
 export const useToolStore = create<ToolStore>(() => ({
-    tool: "line"
+  tool: "line",
 }));
 
-
-
-type drawingProps = {
-    lines: any[];
-}
+export type drawingProps = {
+  isdrawing: boolean;
+  lines: Vector3[][];
+};
 
 export const useDrawingStore = create<drawingProps>(() => ({
-    lines: []
+  isdrawing: false,
+  lines: [],
+}));
+
+export type mouseCoords = {
+  start: [number, number];
+  end: [number, number];
+};
+
+export const useMouseCoords = create<mouseCoords>(() => ({
+  start: [0, 0],
+  end: [0, 0],
+}));
+
+export type keysEventsProps = {
+  commandMode: boolean;
+};
+
+export const useKeysEvents = create<keysEventsProps>(() => ({
+  commandMode: false,
 }));

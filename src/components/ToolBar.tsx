@@ -4,6 +4,7 @@ import LineTool from "./tools/LineTool.tsx";
 import RectTool from "./tools/RectTool.tsx";
 import { useToolStore } from "../store.ts";
 import PrintTool from "./tools/PrintTool.tsx";
+import EraserTool from "./tools/EraserTool.tsx";
 
 interface props {
   className: string;
@@ -18,11 +19,15 @@ const tools: {
 }[] = [
   {
     id: "rect",
-    element: LineTool,
+    element: RectTool,
   },
   {
     id: "line",
-    element: RectTool,
+    element: LineTool,
+  },
+  {
+    id: "eraser",
+    element: EraserTool,
   },
   {
     id: "print",
