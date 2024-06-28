@@ -1,7 +1,7 @@
 import { create } from "zustand";
 
 export type ToolStore = {
-  tool: "rect" | "line" | "eraser" | string;
+  tool: "rect" | "line" | "eraser" | "pen" | string;
 };
 
 export const useToolStore = create<ToolStore>(() => ({

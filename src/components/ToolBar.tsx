@@ -1,7 +1,7 @@
 import React, { MouseEventHandler } from "react";
 
 import LineTool from "./tools/LineTool.tsx";
-import RectTool from "./tools/RectTool.tsx";
+import RectTool from "./tools/PenTool.tsx";
 import { useToolStore } from "../store.ts";
 import PrintTool from "./tools/PrintTool.tsx";
 import EraserTool from "./tools/EraserTool.tsx";
@@ -18,7 +18,7 @@ const tools: {
   }>;
 }[] = [
   {
-    id: "rect",
+    id: "pen",
     element: RectTool,
   },
   {
