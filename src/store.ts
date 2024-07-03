@@ -11,11 +11,13 @@ export const useToolStore = create<ToolStore>(() => ({
 export type drawingProps = {
   isdrawing: boolean;
   lines: Vector3[][];
+  currentLine: [Vector3, Vector3] | null;
 };
 
 export const useDrawingStore = create<drawingProps>(() => ({
   isdrawing: false,
   lines: [],
+  currentLine: null,
 }));
 
 export type mouseCoords = {

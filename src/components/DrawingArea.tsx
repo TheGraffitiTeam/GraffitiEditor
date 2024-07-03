@@ -13,6 +13,8 @@ const DrawingArea: React.FC<props> = ({ className }) => {
 
   const tool = useToolStore((state) => state.tool);
   const lines = useDrawingStore((state) => state.lines);
+  const currentlines = useDrawingStore((state) => state.currentLine);
+  const mouseCoords = useMouseCoords((state) => state);
 
   // useEffect(() => {
   //   const onKeyDown = (e: KeyboardEvent) => {
@@ -127,6 +129,99 @@ const DrawingArea: React.FC<props> = ({ className }) => {
                 useMouseCoords.setState({
                   start: [Math.floor(x), Math.floor(y)],
                 });
+
+                if (tool == "line") {
+                  useDrawingStore.setState({
+                    isdrawing: true,
+                  });
+
+                  useDrawingStore.setState({
+                    currentLine: [
+                      new Vector3(
+                        useMouseCoords.getState().start[0],
+                        useMouseCoords.getState().start[1],
+                        0
+                      ),
+                      new Vector3(0, 0, 0),
+                    ],
+                  });
+                }
+              }
+            }
+          }}
+          onMouseMove={(e) => {
+            if (canvas.current) {
+              const ctx = canvas.current.getContext("2d");
+
+              if (ctx) {
+                const canvasRect = canvas.current.getBoundingClientRect();
+                const offsetX = canvasRect.left;
+                const offsetY = canvasRect.top;
+
+                const x = e.clientX - offsetX;
+                const y = e.clientY - offsetY;
+                // Start drawing logic here
+
+                useMouseCoords.setState({
+                  end: [Math.floor(x), Math.floor(y)],
+                });
+
+                console.log(useMouseCoords.getState());
+
+                if (
+                  tool == "line" &&
+                  useDrawingStore.getState().isdrawing == true
+                ) {
+                  useDrawingStore.setState({
+                    currentLine: [
+                      new Vector3(
+                        useMouseCoords.getState().start[0],
+                        useMouseCoords.getState().start[1],
+                        0
+                      ),
+                      new Vector3(
+                        useMouseCoords.getState().end[0],
+                        useMouseCoords.getState().end[1],
+                        0
+                      ),
+                    ],
+                  });
+
+                  setCanvasResolution(
+                    canvas.current,
+                    ctx,
+                    canvas.current.clientWidth,
+                    canvas.current.clientHeight
+                  );
+
+                  ctx.clearRect(
+                    0,
+                    0,
+                    canvas.current.width,
+                    canvas.current.height
+                  );
+
+                  lines.forEach((line) => {
+                    drawLine(
+                      ctx as CanvasRenderingContext2D,
+                      line[0].x,
+                      line[0].y,
+                      line[1].x,
+                      line[1].y
+                    );
+                  });
+
+                  const currentLine = useDrawingStore.getState().currentLine;
+                  if (currentLine != null) {
+                    drawLine(
+                      ctx,
+                      currentLine[0].x,
+                      currentLine[0].y,
+                      currentLine[1].x,
+                      currentLine[1].y
+                    );
+                  }
+                }
               }
             }
           }}
@@ -149,21 +244,11 @@ const DrawingArea: React.FC<props> = ({ className }) => {
 
                 if (tool == "line") {
                   useDrawingStore.setState({
-                    lines: [
-                      ...lines,
-                      [
-                        new Vector3(
-                          useMouseCoords.getState().start[0],
-                          useMouseCoords.getState().start[1],
-                          0
-                        ),
-                        new Vector3(
-                          useMouseCoords.getState().end[0],
-                          useMouseCoords.getState().end[1],
-                          0
-                        ),
-                      ],
-                    ],
+                    lines: [...lines, currentlines as [Vector3, Vector3]],
+                  });
+
+                  useDrawingStore.setState({
+                    isdrawing: false,
                   });
                 } else if (tool == "eraser") {
                   const newLines = lines.filter((line) => {
