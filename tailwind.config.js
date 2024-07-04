@@ -5,6 +5,7 @@ export default {
     extend: {
       cursor: {
         eraser: "url(/eraser.svg), auto",
+        pen: "url(/pen.svg), auto",
       },
     },
   },

@@ -3,8 +3,12 @@ export function drawLine(
   startX: number,
   startY: number,
   endX: number,
-  endY: number
+  endY: number,
+  color: string = "black",
+  thickness: number = 1
 ) {
+  ctx.strokeStyle = color;
+  ctx.lineWidth = thickness ;
   ctx.beginPath();
   ctx.moveTo(startX, startY);
   ctx.lineTo(endX, endY);

@@ -12,12 +12,14 @@ export type drawingProps = {
   isdrawing: boolean;
   lines: Vector3[][];
   currentLine: [Vector3, Vector3] | null;
+  currentPolygone: Vector3[];
 };
 
 export const useDrawingStore = create<drawingProps>(() => ({
   isdrawing: false,
   lines: [],
   currentLine: null,
+  currentPolygone: [],
 }));
 
 export type mouseCoords = {
