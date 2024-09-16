@@ -1,5 +1,6 @@
 import React, { MouseEventHandler } from "react";
-import { useDrawingStore, useToolStore } from "../../store.ts";
+// import { useDrawingStore, useToolStore } from "../../store.ts";
+import { useToolStore } from "../../store.ts";
 
 const LineTool: React.FC<{
   name: string;
