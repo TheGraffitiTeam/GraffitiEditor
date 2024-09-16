@@ -1,4 +1,5 @@
 import React, { MouseEventHandler } from "react";
+import { invoke } from "@tauri-apps/api/tauri";
 
 import LineTool from "./tools/LineTool.tsx";
 import RectTool from "./tools/PenTool.tsx";
@@ -44,6 +45,9 @@ const ToolBar: React.FC<props> = ({ className }) => {
             name={tool.id}
             onClick={() => {
               useToolStore.setState({ tool: tool.id });
+              // invoke call invokes print command on rust backend
+              invoke("print", { coordinates: "1, 2, 3" })
+              .then(()=>{console.log("invoked")});
             }}
             key={index}
           />
